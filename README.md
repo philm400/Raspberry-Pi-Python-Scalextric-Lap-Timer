@@ -19,4 +19,5 @@ It's early days, and I will be extending this dashboard further in the coming we
 * Scalextric Track
 * 2 cars with Magnatraction (magnets on the chasis)
 
-More detail to follow, including a Fritzing Diagram of my setup
+## Raspberry Pi Fritzing diagram
+https://raw.githubusercontent.com/philm400/Raspberry-Pi-Python-Scalextric-Lap-Timer/master/docs/img/Scalextric-Reed-Swtichs_diagram.png
