@@ -1,5 +1,6 @@
 from tkinter import *
 from threading import Thread
+from PIL import Image
 import RPi.GPIO as GPIO
 import time
 
@@ -17,11 +18,9 @@ class StopWatch(Frame):
 		self.e = 0
 		self.m = 0
 		self.makeWidgets()
-		#self.trigger = inputID
 		self.laps = []
 		self.lapmod2 = 0
 		self.today = time.strftime("%d %b %Y %H-%M-%S", time.localtime())
-		#print(self.trigger)
 	
 	def gpioTrigger(self):
 		if (len(self.laps)+1 == int(LapRace.get())): # Finish Race if last lap
@@ -173,6 +172,16 @@ def StopRace():
 def ResetRace():
 	sw.Reset()
 	sw2.Reset()
+	
+def RaceLights():
+	cv = Canvas(root.tk, width=92, height=250)
+	cv.pack()
+	photo = PhotoImage(file="imgs/light_off.png")
+	root.tk.lightoff = photo
+	cv.create_image(0,0, image=photo, anchor='nw')
+	#light1 = Label(image=photo)
+	#light1.image = photo
+	#light1.pack()
 		
 def playBuzz():
 	print('buzz...')
@@ -208,6 +217,8 @@ def playBuzz():
 	GPIO.setup(pins[2], GPIO.IN)
 				
 def main():
+	global root, sw, sw2, inputID, pins, LapRace, pwm
+	
 	GPIO.setmode(GPIO.BCM)
 	
 	root = Fullscreen_Window()
@@ -215,7 +226,6 @@ def main():
 	root.tk.configure(bg='white')
 	root.tk.title('Scalextric Race Control')
 	
-	global sw, sw2, inputID, pins, LapRace, pwm
 	pins = [21,23,18] # lane1, lane2, buzzer
 	sw = StopWatch(root.tk)
 	sw2 = StopWatch(root.tk)
@@ -225,7 +235,8 @@ def main():
 	Button(root.tk, text='Quit', command=root.tk.quit, font=('Roboto 12')).pack(side=BOTTOM, anchor=S, fill=X, padx=40, pady=(2,30))
 	Button(root.tk, text='Reset', command=ResetRace, font=('Roboto 12')).pack(side=BOTTOM, anchor=S, fill=X, padx=40, pady=2)
 	Button(root.tk, text='Stop', command=StopRace, font=('Roboto 12')).pack(side=BOTTOM, anchor=S, fill=X, padx=40, pady=2) 
-	Button(root.tk, text='Start', command=StartRace, font=('Roboto 18 bold')).pack(side=BOTTOM, anchor=S, fill=X, padx=40, pady=2)
+	## Button(root.tk, text='Start', command=StartRace, font=('Roboto 18 bold')).pack(side=BOTTOM, anchor=S, fill=X, padx=40, pady=2)
+	Button(root.tk, text='Start', command=RaceLights, font=('Roboto 18 bold')).pack(side=BOTTOM, anchor=S, fill=X, padx=40, pady=2)
 
 	raceSetup = raceWidgets(root.tk)
 	raceSetup.pack(side=BOTTOM, anchor=S, fill=X, pady=20)
