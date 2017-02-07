@@ -175,13 +175,54 @@ def ResetRace():
 	
 def RaceLights():
 	cv = Canvas(root.tk, width=92, height=250)
-	cv.pack()
 	photo = PhotoImage(file="imgs/light_off.png")
+	photo2 = PhotoImage(file="imgs/light_red.png")
+	photo3 = PhotoImage(file="imgs/light_green.png")
 	root.tk.lightoff = photo
-	cv.create_image(0,0, image=photo, anchor='nw')
-	#light1 = Label(image=photo)
-	#light1.image = photo
-	#light1.pack()
+	#cv.create_image(0,0, image=photo, anchor='nw')
+	#cv.place(x=50, y=50)
+	light1 = Label(root.tk, image=photo)
+	light1.image = photo
+	light1.place(x=154, y=100)
+	
+	light2 = Label(root.tk, image=photo)
+	light2.image = photo
+	light2.place(x=254, y=100)
+	
+	light3 = Label(root.tk, image=photo)
+	light3.image = photo
+	light3.place(x=354, y=100)
+	
+	light4 = Label(root.tk, image=photo)
+	light4.image = photo
+	light4.place(x=454, y=100)
+	
+	light5 = Label(root.tk, image=photo)
+	light5.image = photo
+	light5.place(x=554, y=100)
+	
+	root.tk.update()
+	
+	time.sleep(1)
+	light1.config(image = photo2)
+	light1.image = photo2
+	root.tk.update()
+	time.sleep(1)
+	light2.config(image = photo2)
+	light2.image = photo2
+	root.tk.update()
+	time.sleep(1)
+	light3.config(image = photo2)
+	light3.image = photo2
+	root.tk.update()
+	time.sleep(1)
+	light4.config(image = photo2)
+	light4.image = photo2
+	root.tk.update()
+	time.sleep(1)
+	light5.config(image = photo2)
+	light5.image = photo2
+	root.tk.update()
 		
 def playBuzz():
 	print('buzz...')
