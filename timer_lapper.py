@@ -30,7 +30,7 @@ class StopWatch(Frame):
 
 	def makeWidgets(self):
 		l = Label(self, textvariable=self.timestr)
-		l.config(fg="dark green", bg='white', font=("Roboto 36 bold"))
+		l.config(fg="green4", bg='white', font=("Roboto 36 bold"))
 		self._setTime(self._elapsedtime)
 		l.pack(fill=X, expand=NO, pady=(0,2), padx=2)
 		
@@ -174,54 +174,48 @@ def ResetRace():
 	sw2.Reset()
 	
 def RaceLights():
-	cv = Canvas(root.tk, width=92, height=250)
 	photo = PhotoImage(file="imgs/light_off.png")
 	photo2 = PhotoImage(file="imgs/light_red.png")
 	photo3 = PhotoImage(file="imgs/light_green.png")
-	root.tk.lightoff = photo
-	#cv.create_image(0,0, image=photo, anchor='nw')
-	#cv.place(x=50, y=50)
-	light1 = Label(root.tk, image=photo)
-	light1.image = photo
-	light1.place(x=154, y=100)
+	lights = []
+	coords = [[154,100],[254,100],[354,100],[454,100],[554,100]]
+
+	cv = Canvas(root.tk, width=800, height=470, bg='gray30')
+	cv.place(x=0, y=0)
+
+	for i in range(5):
+		lights.append(Label(root.tk, image=photo, bg='gray30'))
+		lights[i].image = photo
+		lights[i].place(x=coords[i][0], y=coords[i][1])
 	
-	light2 = Label(root.tk, image=photo)
-	light2.image = photo
-	light2.place(x=254, y=100)
-	
-	light3 = Label(root.tk, image=photo)
-	light3.image = photo
-	light3.place(x=354, y=100)
-	
-	light4 = Label(root.tk, image=photo)
-	light4.image = photo
-	light4.place(x=454, y=100)
-	
-	light5 = Label(root.tk, image=photo)
-	light5.image = photo
-	light5.place(x=554, y=100)
+	lights.append(cv)
 	
 	root.tk.update()
+	time.sleep(1)
+	
+	for i in range(5):
+		time.sleep(1)
+		lights[i].config(image = photo2)
+		lights[i].image = photo2
+		root.tk.update()
+		
+	for i in range(5):
+		lights[i].config(image = photo3)
+		lights[i].image = photo3
 	
 	time.sleep(1)
-	light1.config(image = photo2)
-	light1.image = photo2
 	root.tk.update()
+	
+	lo = Thread(target=LightsOut, args=([lights]))
+	lo.start()
+	
+	StartRace()
+	
+def LightsOut(lights):
 	time.sleep(1)
-	light2.config(image = photo2)
-	light2.image = photo2
-	root.tk.update()
-	time.sleep(1)
-	light3.config(image = photo2)
-	light3.image = photo2
-	root.tk.update()
-	time.sleep(1)
-	light4.config(image = photo2)
-	light4.image = photo2
-	root.tk.update()
-	time.sleep(1)
-	light5.config(image = photo2)
-	light5.image = photo2
+	for i in range(5):
+		lights[i].destroy()
+	lights[5].destroy()
 	root.tk.update()
 		
 def playBuzz():
