@@ -108,6 +108,7 @@ class StopWatch(Frame):
 
 	def Lap(self):
 		'''Makes a lap, only if started'''
+		split = Thread(target=splitTimes, args=())
 		tempo = self._elapsedtime - self.lapmod2
 		if (self._running):
 			self.laps.append([self._setLapTime(tempo),float("{0:.3f}".format(tempo))])
@@ -116,7 +117,7 @@ class StopWatch(Frame):
 			self.lapmod2 = self._elapsedtime
 			# Update lap counter       
 			self.lapstr.set('Lap: {} / {}'.format(len(self.laps), int(LapRace.get())))
-			splitTimes()
+			split.start()
 	
 class raceWidgets(Frame):
 	def __init__(self, parent=None, **kw):        
@@ -251,21 +252,6 @@ def playBuzz():
 	GPIO.setup(pins[2], GPIO.IN)
 	
 def splitTimes():
-	c1 = 0
-	c2 = 0
-	#for i in range(len(sw.laps)):
-	#	c1 += sw.laps[i][1]
-	#for i in range(len(sw2.laps)):
-	#	c2 += sw2.laps[i][1]
-	#if (c1 > c2):
-	#	diff = c1-c2
-	#	print("Lane 1: +{0:.3f}".format(diff))
-	#elif (c2 > c1):
-	#	diff = c2-c1
-	#	print("Lane 2: +{0:.3f}".format(diff))
-	#else:
-	#	diff = 0
-	#	print("Equal Time".format(diff))
 	if ((len(sw.laps) > 0) and (len(sw2.laps) > 0)):
 		c1 = 0
 		c2 = 0
