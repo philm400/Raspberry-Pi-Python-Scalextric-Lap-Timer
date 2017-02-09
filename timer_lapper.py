@@ -68,7 +68,6 @@ class StopWatch(Frame):
 
 	def _setLapTime(self, elap):
 		""" Set the time string to Minutes:Seconds:Thousandths """
-		print(elap)
 		minutes = int(elap/60)
 		seconds = int(elap - minutes*60.0)
 		hseconds = int((elap - minutes*60.0 - seconds)*1000)           
@@ -111,12 +110,13 @@ class StopWatch(Frame):
 		'''Makes a lap, only if started'''
 		tempo = self._elapsedtime - self.lapmod2
 		if (self._running):
-			self.laps.append(self._setLapTime(tempo))
-			self.m.insert(END, self.laps[-1])
+			self.laps.append([self._setLapTime(tempo),float("{0:.3f}".format(tempo))])
+			self.m.insert(END, self.laps[-1][0])
 			self.m.yview_moveto(1)
 			self.lapmod2 = self._elapsedtime
 			# Update lap counter       
 			self.lapstr.set('Lap: {} / {}'.format(len(self.laps), int(LapRace.get())))
+			splitTimes()
 	
 class raceWidgets(Frame):
 	def __init__(self, parent=None, **kw):        
@@ -163,7 +163,6 @@ def triggerLap(channel):
 def StartRace():
 	sw.Start()
 	sw2.Start()
-	print(LapRace.get())
 	
 def StopRace():
 	sw.Stop()
@@ -250,6 +249,68 @@ def playBuzz():
 	time.sleep(1)
 	pwm.ChangeDutyCycle(100)
 	GPIO.setup(pins[2], GPIO.IN)
+	
+def splitTimes():
+	c1 = 0
+	c2 = 0
+	#for i in range(len(sw.laps)):
+	#	c1 += sw.laps[i][1]
+	#for i in range(len(sw2.laps)):
+	#	c2 += sw2.laps[i][1]
+	#if (c1 > c2):
+	#	diff = c1-c2
+	#	print("Lane 1: +{0:.3f}".format(diff))
+	#elif (c2 > c1):
+	#	diff = c2-c1
+	#	print("Lane 2: +{0:.3f}".format(diff))
+	#else:
+	#	diff = 0
+	#	print("Equal Time".format(diff))
+	if ((len(sw.laps) > 0) and (len(sw2.laps) > 0)):
+		c1 = 0
+		c2 = 0
+		sameDiff = 0
+		extraDiff = 0
+		totalDiff = 0
+		if (len(sw.laps) > len(sw2.laps)):  # Lane 1 in the lead
+			sameLaps = len(sw2.laps)
+			extraLaps = len(sw.laps) - len(sw2.laps)
+			sameArr = [sw.laps[:sameLaps], sw2.laps[:sameLaps]]
+			extraArr = sw.laps[-extraLaps:]
+			for i in range(len(sameArr[0])):
+				c1 += sameArr[0][i][1]
+				c2 += sameArr[1][i][1]
+				sameDiff = c2 - c1
+			for i in range(len(extraArr)):
+				extraDiff += extraArr[i][1]
+			totalDiff = sameDiff + extraDiff
+			print('Lane 2: +'+str(totalDiff))
+		elif (len(sw.laps) < len(sw2.laps)):  # Lane 2 in the lead
+			sameLaps = len(sw.laps)
+			extraLaps = len(sw2.laps) - len(sw.laps)
+			sameArr = [sw2.laps[:sameLaps], sw.laps[:sameLaps]]
+			extraArr = sw2.laps[-extraLaps:]
+			for i in range(len(sameArr[0])):
+				c1 += sameArr[0][i][1]
+				c2 += sameArr[1][i][1]
+				sameDiff = c2 - c1
+			for i in range(len(extraArr)):
+				extraDiff += extraArr[i][1]
+			totalDiff = sameDiff + extraDiff
+			print('Lane 1: +'+str(totalDiff))
+		else:  # equal Laps - just need the total same difference
+			sameLaps = len(sw.laps)
+			sameArr = [sw2.laps[:sameLaps], sw.laps[:sameLaps]]
+			for i in range(len(sameArr[0])):
+				c1 += sameArr[0][i][1]
+				c2 += sameArr[1][i][1]
+				totalDiff = c2 - c1
+			if (totalDiff > 0):
+				print('Lane 1: +'+str(abs(totalDiff)))
+			else:
+				print('Lane 2: +'+str(abs(totalDiff)))
+				
+		
 				
 def main():
 	global root, sw, sw2, inputID, pins, LapRace, pwm
@@ -270,8 +331,8 @@ def main():
 	Button(root.tk, text='Quit', command=root.tk.quit, font=('Roboto 12')).pack(side=BOTTOM, anchor=S, fill=X, padx=40, pady=(2,30))
 	Button(root.tk, text='Reset', command=ResetRace, font=('Roboto 12')).pack(side=BOTTOM, anchor=S, fill=X, padx=40, pady=2)
 	Button(root.tk, text='Stop', command=StopRace, font=('Roboto 12')).pack(side=BOTTOM, anchor=S, fill=X, padx=40, pady=2) 
-	## Button(root.tk, text='Start', command=StartRace, font=('Roboto 18 bold')).pack(side=BOTTOM, anchor=S, fill=X, padx=40, pady=2)
-	Button(root.tk, text='Start', command=RaceLights, font=('Roboto 18 bold')).pack(side=BOTTOM, anchor=S, fill=X, padx=40, pady=2)
+	Button(root.tk, text='Start', command=StartRace, font=('Roboto 18 bold')).pack(side=BOTTOM, anchor=S, fill=X, padx=40, pady=2)
+	#Button(root.tk, text='Start', command=RaceLights, font=('Roboto 18 bold')).pack(side=BOTTOM, anchor=S, fill=X, padx=40, pady=2)
 
 	raceSetup = raceWidgets(root.tk)
 	raceSetup.pack(side=BOTTOM, anchor=S, fill=X, pady=20)
