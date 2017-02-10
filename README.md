@@ -3,7 +3,7 @@ A Python3 based Scalextric lap timer dashboard built on the Raspberry Pi using t
 
 This is a personal Raspberry Pi 3b project I have been working on for a couple of weeks. My son recently got a Scalextric Sport set and the Arc One base plate. It's not bad, the Android is OK but fun is limited when you are looking a small screen for your lap time or who is leading the race.
 
-I thought I could do a better and make a full screen race control dashboard using the Pi, some Reed sensors and a little Python 3 magic.
+I thought I could do better and make a full screen race control dashboard using the Pi, some Reed sensors and a little Python 3 magic.
 
 The basis of the timer is derived from: http://code.activestate.com/recipes/578666-stopwatch-with-laps-in-tkinter/ but modified to make it better, with an independant timer for each lane. GPIO integration to trigger a lap and more.
 
