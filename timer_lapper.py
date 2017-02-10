@@ -306,8 +306,10 @@ def splitTimes():
 		totalDiff = abs(sameDiff + extraDiff)
 		sw.lapSplit.set('Split: -'+str(float("{0:.3f}".format(totalDiff))))
 		sw.spt.config(fg=colGreen)
+		sw.l.config(fg=colGreen)
 		sw2.lapSplit.set('Split: +'+str(float("{0:.3f}".format(totalDiff))))
 		sw2.spt.config(fg=colRed)
+		sw2.l.config(fg=colRed)
 	elif (len(sw.laps) < len(sw2.laps)):  # Lane 2 in the lead
 		sameLaps = len(sw.laps)
 		extraLaps = len(sw2.laps) - len(sw.laps)
@@ -322,8 +324,10 @@ def splitTimes():
 		totalDiff = abs(sameDiff + extraDiff)
 		sw2.lapSplit.set('Split: -'+str(float("{0:.3f}".format(totalDiff))))
 		sw2.spt.config(fg=colGreen)
+		sw2.l.config(fg=colGreen)
 		sw.lapSplit.set('Split: +'+str(float("{0:.3f}".format(totalDiff))))
 		sw.spt.config(fg=colRed)
+		sw.l.config(fg=colRed)
 	else:  # equal Laps - just need the total same difference
 		sameLaps = len(sw.laps)
 		sameArr = [sw2.laps[:sameLaps], sw.laps[:sameLaps]]
@@ -379,7 +383,7 @@ def main():
 	Button(root.tk, text='Reset', command=ResetRace, font=('Roboto 12'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=20, pady=2)
 	Button(root.tk, text='Stop', command=StopRace, font=('Roboto 12'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=20, pady=2) 
 	Button(root.tk, text='Start', command=StartRace, font=('Roboto 18 bold'), bg=colGreen, fg='white', highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=20, pady=2)
-	#Button(root.tk, text='Start', command=RaceLights, font=('Roboto 18 bold'), bg=colGreen, fg='white', highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=20, pady=2)
+	Button(root.tk, text='Start L', command=RaceLights, font=('Roboto 18 bold'), bg=colGreen, fg='white', highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=20, pady=2)
 
 	raceSetup = raceWidgets(root.tk)
 	raceSetup.pack(side=BOTTOM, anchor=S, fill=X, pady=20)
