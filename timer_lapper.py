@@ -9,12 +9,15 @@ class StopWatch(Frame):
 	def __init__(self, parent=None, **kw):        
 		Frame.__init__(self, parent, kw)
 		global LapRace
-		self.configure(bg='white')
+		self.config(bg=colBg2)
 		self._start = 0.0        
 		self._elapsedtime = 0.0
 		self._running = 0
 		self.timestr = StringVar()
 		self.lapstr = StringVar()
+		self.lapSplit = StringVar()
+		self.bestLap = StringVar()
+		self.bestTime = 0
 		self.e = 0
 		self.m = 0
 		self.makeWidgets()
@@ -28,28 +31,42 @@ class StopWatch(Frame):
 		else:
 			self.Lap()
 
-	def makeWidgets(self):
-		l = Label(self, textvariable=self.timestr)
-		l.config(fg="green4", bg='white', font=("Roboto 36 bold"))
-		self._setTime(self._elapsedtime)
-		l.pack(fill=X, expand=NO, pady=(0,2), padx=2)
-		
+	def makeWidgets(self):		
 		l2 = Label(self, textvariable=self.lapstr)
 		self.lapstr.set('Lap: 0 / 0')
-		l2.config(fg="gray10", bg='white', font=("Roboto 14 bold"))
-		l2.pack(fill=X, expand=NO, pady=2, padx=2)
+		l2.config(fg=colFg2, bg=colBg2, font=("Roboto 14 bold"))
+		l2.pack(fill=X, expand=NO, pady=0, padx=0)
+		
+		self.l = Label(self, textvariable=self.timestr)
+		self.l.config(fg=colFg2, bg=colBg2, font=("Roboto 42 bold"))
+		self._setTime(self._elapsedtime)
+		self.l.pack(fill=X, expand=NO, pady=0, padx=0)
+		
+		frm = Frame(self)
+		frm.config(bg=colBg2)
+		frm.pack(fill=X, expand=1, pady=(0,20))
+		
+		self.spt = Label(frm, textvariable=self.lapSplit, anchor=W)
+		self.lapSplit.set('Split: ')
+		self.spt.config(fg=colFg1, bg=colBg2, font=("Roboto 13 bold"))
+		self.spt.pack(pady=0, padx=0, fill=X, expand=1, side=LEFT)
+				
+		self.best = Label(frm, textvariable=self.bestLap, anchor=E)
+		self.bestLap.set('Best: ')
+		self.best.config(fg=colFg1, bg=colBg2, font=("Roboto 13 bold"))
+		self.best.pack(pady=0, padx=0, fill=X, expand=1, side=RIGHT)
 
 		l3 = Label(self, text='- Times -')
-		l3.config(bg='white', font=('Roboto 10'))
-		l3.pack(fill=X, expand=NO, pady=2, padx=2)
+		l3.config(fg=colFg1, bg=colBg1, font=('Roboto 10'))
+		l3.pack(fill=X, expand=NO, pady=0, padx=0)
 		
-		Button(self, text='Finish Line', command=self.Finish, font=('Roboto 10')).pack(side=BOTTOM, fill=X, expand=1)
-		Button(self, text='Lap', command=self.Lap, font=('Roboto 10')).pack(side=BOTTOM, fill=X, expand=1, pady=(10,0))
+		Button(self, text='Finish Line', command=self.Finish, font=('Roboto 10'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, fill=X, expand=1, padx=0, pady=0)
+		Button(self, text='Lap', command=self.Lap, font=('Roboto 10'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, fill=X, expand=1, padx=0, pady=0)
 		
-		scrollbar = Scrollbar(self, orient=VERTICAL)
+		scrollbar = Scrollbar(self, orient=VERTICAL, bg=colScroll, highlightthickness=0, relief=FLAT, troughcolor=colBg1, bd=0 )
 		self.m = Listbox(self,selectmode=EXTENDED, height = 10, yscrollcommand=scrollbar.set)
-		self.m.config(bd='0', bg='gray90', font=('Courier 12'))
-		self.m.pack(side=LEFT, fill=BOTH, expand=1, pady=0, padx=(0,5))
+		self.m.config(bd='0', fg=colFg1, bg=colBg1, highlightthickness=0, font=('Courier 12'))
+		self.m.pack(side=LEFT, fill=BOTH, expand=1, pady=0, padx=0)
 		scrollbar.config(command=self.m.yview)
 		scrollbar.pack(side=RIGHT, fill=Y)
 
@@ -72,6 +89,18 @@ class StopWatch(Frame):
 		seconds = int(elap - minutes*60.0)
 		hseconds = int((elap - minutes*60.0 - seconds)*1000)           
 		return '%02d:%02d:%02d' % (minutes, seconds, hseconds)
+		
+	def _bestLap(self, elap):
+		if ((elap < self.bestTime) or (self.bestTime == 0)):
+			self.bestTime = elap
+			self.bestLap.set('Best: '+str(float("{0:.3f}".format(elap))))
+			self.best.config(fg=colPurple)
+			for i in range(3):
+				time.sleep(0.3)
+				self.best.config(fg=colFg1)
+				time.sleep(0.3)
+				self.best.config(fg=colPurple)
+			
 
 	def Start(self):                                                     
 		""" Start the stopwatch, ignore if running. """
@@ -81,7 +110,7 @@ class StopWatch(Frame):
 			self._update()
 			self._running = 1        
     
-	def Stop(self):                                    
+	def Stop(self):
 		""" Stop the stopwatch, ignore if stopped. """
 		if self._running:
 			self.after_cancel(self._timer)            
@@ -97,6 +126,12 @@ class StopWatch(Frame):
 		self.m.delete(0,END)
 		self.lapmod2 = self._elapsedtime
 		self._setTime(self._elapsedtime)
+		self.lapSplit.set('Split: ')
+		self.bestLap.set('Best: ')
+		self.l.config(fg=colFg1)
+		self.spt.config(fg=colFg1)
+		self.best.config(fg=colFg1)
+		self.bestTime = 0
 
 		
 	def Finish(self):
@@ -118,20 +153,22 @@ class StopWatch(Frame):
 			# Update lap counter       
 			self.lapstr.set('Lap: {} / {}'.format(len(self.laps), int(LapRace.get())))
 			split.start()
+			bestCheck = Thread(target=self._bestLap, args=(float("{0:.3f}".format(tempo)),))
+			bestCheck.start()
 	
 class raceWidgets(Frame):
 	def __init__(self, parent=None, **kw):        
 		Frame.__init__(self, parent, kw)
 		global LapRace
-		self.configure(bg='white')
+		self.configure(bg=colBg1)
 		LapRace = StringVar()
 		l = Label(self, text='Set Number of Laps')
-		l.config(bg='white', fg='gray25', font="Roboto 12")
+		l.config(bg=colBg1, fg=colFg1, font="Roboto 12")
 		l.pack(expand=1)
 		LapRace.set('10')
 		et = Entry(self, textvariable=LapRace, width=5, justify='center')
-		et.config(bd='0', fg='gray25', font="Roboto 14 bold")
-		et.pack(expand=1)
+		et.config(bd='0', bg=colBg2 ,fg=colFg2, highlightthickness=0, font="Roboto 14 bold")
+		et.pack(expand=1, pady=3)
 		
 class Fullscreen_Window:
 	def __init__(self):
@@ -155,7 +192,6 @@ class Fullscreen_Window:
 					
 		
 def triggerLap(channel):
-	print("Pin: "+str(channel))
 	if ((GPIO.input(channel)) and (channel == pins[0])):
 		sw.gpioTrigger()
 	elif ((GPIO.input(channel)) and (channel == pins[1])):
@@ -180,11 +216,11 @@ def RaceLights():
 	lights = []
 	coords = [[154,100],[254,100],[354,100],[454,100],[554,100]]
 
-	cv = Canvas(root.tk, width=800, height=470, bg='gray30')
+	cv = Canvas(root.tk, width=800, height=470, bg=colBg1)
 	cv.place(x=0, y=0)
 
 	for i in range(5):
-		lights.append(Label(root.tk, image=photo, bg='gray30'))
+		lights.append(Label(root.tk, image=photo, bg=colBg1))
 		lights[i].image = photo
 		lights[i].place(x=coords[i][0], y=coords[i][1])
 	
@@ -219,7 +255,6 @@ def LightsOut(lights):
 	root.tk.update()
 		
 def playBuzz():
-	print('buzz...')
 	GPIO.setup(pins[2], GPIO.OUT)
 	pwm = GPIO.PWM(pins[2], 1000)
 	pwm.start(20)
@@ -252,73 +287,99 @@ def playBuzz():
 	GPIO.setup(pins[2], GPIO.IN)
 	
 def splitTimes():
-	if ((len(sw.laps) > 0) and (len(sw2.laps) > 0)):
-		c1 = 0
-		c2 = 0
-		sameDiff = 0
-		extraDiff = 0
-		totalDiff = 0
-		if (len(sw.laps) > len(sw2.laps)):  # Lane 1 in the lead
-			sameLaps = len(sw2.laps)
-			extraLaps = len(sw.laps) - len(sw2.laps)
-			sameArr = [sw.laps[:sameLaps], sw2.laps[:sameLaps]]
-			extraArr = sw.laps[-extraLaps:]
-			for i in range(len(sameArr[0])):
-				c1 += sameArr[0][i][1]
-				c2 += sameArr[1][i][1]
-				sameDiff = c2 - c1
-			for i in range(len(extraArr)):
-				extraDiff += extraArr[i][1]
-			totalDiff = sameDiff + extraDiff
-			print('Lane 2: +'+str(totalDiff))
-		elif (len(sw.laps) < len(sw2.laps)):  # Lane 2 in the lead
-			sameLaps = len(sw.laps)
-			extraLaps = len(sw2.laps) - len(sw.laps)
-			sameArr = [sw2.laps[:sameLaps], sw.laps[:sameLaps]]
-			extraArr = sw2.laps[-extraLaps:]
-			for i in range(len(sameArr[0])):
-				c1 += sameArr[0][i][1]
-				c2 += sameArr[1][i][1]
-				sameDiff = c2 - c1
-			for i in range(len(extraArr)):
-				extraDiff += extraArr[i][1]
-			totalDiff = sameDiff + extraDiff
-			print('Lane 1: +'+str(totalDiff))
-		else:  # equal Laps - just need the total same difference
-			sameLaps = len(sw.laps)
-			sameArr = [sw2.laps[:sameLaps], sw.laps[:sameLaps]]
-			for i in range(len(sameArr[0])):
-				c1 += sameArr[0][i][1]
-				c2 += sameArr[1][i][1]
-				totalDiff = c2 - c1
-			if (totalDiff > 0):
-				print('Lane 1: +'+str(abs(totalDiff)))
-			else:
-				print('Lane 2: +'+str(abs(totalDiff)))
+	c1 = 0
+	c2 = 0
+	sameDiff = 0
+	extraDiff = 0
+	totalDiff = 0
+	if (len(sw.laps) > len(sw2.laps)):  # Lane 1 in the lead
+		sameLaps = len(sw2.laps)
+		extraLaps = len(sw.laps) - len(sw2.laps)
+		sameArr = [sw.laps[:sameLaps], sw2.laps[:sameLaps]]
+		extraArr = sw.laps[-extraLaps:]
+		for i in range(len(sameArr[0])):
+			c1 += sameArr[0][i][1]
+			c2 += sameArr[1][i][1]
+			sameDiff = c2 - c1
+		for i in range(len(extraArr)):
+			extraDiff += extraArr[i][1]
+		totalDiff = abs(sameDiff + extraDiff)
+		sw.lapSplit.set('Split: -'+str(float("{0:.3f}".format(totalDiff))))
+		sw.spt.config(fg=colGreen)
+		sw2.lapSplit.set('Split: +'+str(float("{0:.3f}".format(totalDiff))))
+		sw2.spt.config(fg=colRed)
+	elif (len(sw.laps) < len(sw2.laps)):  # Lane 2 in the lead
+		sameLaps = len(sw.laps)
+		extraLaps = len(sw2.laps) - len(sw.laps)
+		sameArr = [sw2.laps[:sameLaps], sw.laps[:sameLaps]]
+		extraArr = sw2.laps[-extraLaps:]
+		for i in range(len(sameArr[0])):
+			c1 += sameArr[0][i][1]
+			c2 += sameArr[1][i][1]
+			sameDiff = c2 - c1
+		for i in range(len(extraArr)):
+			extraDiff += extraArr[i][1]
+		totalDiff = abs(sameDiff + extraDiff)
+		sw2.lapSplit.set('Split: -'+str(float("{0:.3f}".format(totalDiff))))
+		sw2.spt.config(fg=colGreen)
+		sw.lapSplit.set('Split: +'+str(float("{0:.3f}".format(totalDiff))))
+		sw.spt.config(fg=colRed)
+	else:  # equal Laps - just need the total same difference
+		sameLaps = len(sw.laps)
+		sameArr = [sw2.laps[:sameLaps], sw.laps[:sameLaps]]
+		for i in range(len(sameArr[0])):
+			c1 += sameArr[0][i][1]
+			c2 += sameArr[1][i][1]
+			totalDiff = c2 - c1
+		if (totalDiff > 0):
+			sw.lapSplit.set('Split: +'+str(float("{0:.3f}".format(abs(totalDiff)))))
+			sw.spt.config(fg=colRed)
+			sw.l.config(fg=colRed)
+			sw2.lapSplit.set('Split: -'+str(float("{0:.3f}".format(abs(totalDiff)))))
+			sw2.spt.config(fg=colGreen)
+			sw2.l.config(fg=colGreen)
+		else:
+			sw2.lapSplit.set('Split: +'+str(float("{0:.3f}".format(abs(totalDiff)))))
+			sw2.spt.config(fg=colRed)
+			sw2.l.config(fg=colRed)
+			sw.lapSplit.set('Split: -'+str(float("{0:.3f}".format(abs(totalDiff)))))
+			sw.spt.config(fg=colGreen)
+			sw.l.config(fg=colGreen)
 				
 		
 				
 def main():
-	global root, sw, sw2, inputID, pins, LapRace, pwm
+	global root, sw, sw2, inputID, pins, LapRace, pwm, colBg1, colBg2, colFg1, colFg2, colGreen, colRed, colPurple, colScroll
+	colBg1 = '#04080c'
+	colBg2 = '#101e28'
+	colFg1 = '#a1aeb4'
+	colFg2 = '#c8d0d4'
+	colGreen = '#6ca32c'
+	colRed = '#f34820'
+	colPurple = '#e051d4'
+	colScroll = '#273a46'	
+	pins = [21,23,18] # lane1, lane2, buzzer
 	
 	GPIO.setmode(GPIO.BCM)
 	
 	root = Fullscreen_Window()
 	root.tk.geometry("800x470")
-	root.tk.configure(bg='white')
+	root.tk.configure(bg='#04080c')
 	root.tk.title('Scalextric Race Control')
 	
-	pins = [21,23,18] # lane1, lane2, buzzer
+	bkgc = Canvas(root.tk, width=800, height=170, bg=colBg2, highlightthickness=0)
+	bkgc.place(x=0, y=0)
+	
 	sw = StopWatch(root.tk)
 	sw2 = StopWatch(root.tk)
 	sw.pack(side=LEFT, padx=30)
 	sw2.pack(side=RIGHT, padx=30)
 
-	Button(root.tk, text='Quit', command=root.tk.quit, font=('Roboto 12')).pack(side=BOTTOM, anchor=S, fill=X, padx=40, pady=(2,30))
-	Button(root.tk, text='Reset', command=ResetRace, font=('Roboto 12')).pack(side=BOTTOM, anchor=S, fill=X, padx=40, pady=2)
-	Button(root.tk, text='Stop', command=StopRace, font=('Roboto 12')).pack(side=BOTTOM, anchor=S, fill=X, padx=40, pady=2) 
-	Button(root.tk, text='Start', command=StartRace, font=('Roboto 18 bold')).pack(side=BOTTOM, anchor=S, fill=X, padx=40, pady=2)
-	#Button(root.tk, text='Start', command=RaceLights, font=('Roboto 18 bold')).pack(side=BOTTOM, anchor=S, fill=X, padx=40, pady=2)
+	Button(root.tk, text='Quit', command=root.tk.quit, font=('Roboto 12'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=20, pady=(2,30))
+	Button(root.tk, text='Reset', command=ResetRace, font=('Roboto 12'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=20, pady=2)
+	Button(root.tk, text='Stop', command=StopRace, font=('Roboto 12'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=20, pady=2) 
+	Button(root.tk, text='Start', command=StartRace, font=('Roboto 18 bold'), bg=colGreen, fg='white', highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=20, pady=2)
+	#Button(root.tk, text='Start', command=RaceLights, font=('Roboto 18 bold'), bg=colGreen, fg='white', highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=20, pady=2)
 
 	raceSetup = raceWidgets(root.tk)
 	raceSetup.pack(side=BOTTOM, anchor=S, fill=X, pady=20)
