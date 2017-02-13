@@ -35,7 +35,7 @@ class StopWatch(Frame):
 		l2 = Label(self, textvariable=self.lapstr)
 		self.lapstr.set('Lap: 0 / 0')
 		l2.config(fg=colFg2, bg=colBg2, font=("Roboto 34 bold"))
-		l2.pack(fill=X, expand=NO, pady=0, padx=0)
+		l2.pack(fill=X, expand=NO, pady=(40,0), padx=0)
 		
 		self.l = Label(self, textvariable=self.timestr)
 		self.l.config(fg=colFg2, bg=colBg2, font=("Roboto 100 bold"))
@@ -44,7 +44,11 @@ class StopWatch(Frame):
 		
 		frm = Frame(self)
 		frm.config(bg=colBg2)
-		frm.pack(fill=X, expand=1, pady=(0,48))
+		frm.pack(fill=X, expand=1, pady=(0,50))
+		
+		frm2 = Frame(self)
+		frm2.config(bg=colBg1)
+		frm2.pack(fill=X, expand=1, pady=0)
 		
 		self.spt = Label(frm, textvariable=self.lapSplit, anchor=W)
 		self.lapSplit.set('Split: ')
@@ -56,15 +60,15 @@ class StopWatch(Frame):
 		self.best.config(fg=colFg1, bg=colBg2, font=("Roboto 32 bold"))
 		self.best.pack(pady=0, padx=0, fill=X, expand=1, side=RIGHT)
 
-		l3 = Label(self, text='- Times -')
-		l3.config(fg=colFg1, bg=colBg1, font=('Roboto 24'))
-		l3.pack(fill=X, expand=NO, pady=0, padx=0)
+		l3 = Label(frm2, text='- Times -')
+		l3.config(fg=colFg1, bg=colBg1, font=('Roboto 16'))
+		l3.pack(fill=X, expand=NO, pady=(30,0), padx=0)
 		
-		Button(self, text='Finish Line', command=self.Finish, font=('Roboto 24'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, fill=X, expand=1, padx=0, pady=0)
-		Button(self, text='Lap', command=self.Lap, font=('Roboto 24'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, fill=X, expand=1, padx=0, pady=10)
+		Button(frm2, text='Finish Line', command=self.Finish, font=('Roboto 24'), bg=colBg1, fg=colFg1, highlightthickness=1, highlightbackground=colFg1, relief=FLAT).pack(side=BOTTOM, fill=X, expand=1, padx=0, pady=0)
+		Button(frm2, text='Lap', command=self.Lap, font=('Roboto 24'), bg=colBg1, fg=colFg1, highlightthickness=1, highlightbackground=colFg1, relief=FLAT).pack(side=BOTTOM, fill=X, expand=1, padx=0, pady=10)
 		
-		scrollbar = Scrollbar(self, orient=VERTICAL, bg=colScroll, highlightthickness=0, relief=FLAT, troughcolor=colBg1, bd=0 )
-		self.m = Listbox(self,selectmode=EXTENDED, height = 10, yscrollcommand=scrollbar.set)
+		scrollbar = Scrollbar(frm2, orient=VERTICAL, bg=colScroll, highlightthickness=0, relief=FLAT, troughcolor=colBg1, bd=0 )
+		self.m = Listbox(frm2,selectmode=EXTENDED, height = 10, yscrollcommand=scrollbar.set)
 		self.m.config(bd='0', fg=colFg1, bg=colBg1, highlightthickness=0, font=('Courier 30'))
 		self.m.pack(side=LEFT, fill=BOTH, expand=1, pady=0, padx=0)
 		scrollbar.config(command=self.m.yview)
@@ -97,7 +101,7 @@ class StopWatch(Frame):
 			self.best.config(fg=colPurple)
 			for i in range(3):
 				time.sleep(0.3)
-				self.best.config(fg=colFg1)
+				self.best.config(fg=colBg2)
 				time.sleep(0.3)
 				self.best.config(fg=colPurple)
 			
@@ -211,9 +215,9 @@ def ResetRace():
 	sw2.Reset()
 	
 def RaceLights():
-	photo = PhotoImage(file="imgs/light_off.png")
-	photo2 = PhotoImage(file="imgs/light_red.png")
-	photo3 = PhotoImage(file="imgs/light_green.png")
+	photo = PhotoImage(file="imgs/light_off_hd.png")
+	photo2 = PhotoImage(file="imgs/light_red_hd.png")
+	photo3 = PhotoImage(file="imgs/light_green_hd.png")
 	lights = []
 	coords = [[370,240],[610,240],[850,240],[1090,240],[1330,240]]
 
@@ -368,23 +372,27 @@ def main():
 	GPIO.setmode(GPIO.BCM)
 	
 	root = Fullscreen_Window()
-	root.tk.geometry("800x470")
+	root.tk.geometry("1920x1080")
 	root.tk.configure(bg='#04080c')
 	root.tk.title('Scalextric Race Control')
 	
-	bkgc = Canvas(root.tk, width=1920, height=392, bg=colBg2, highlightthickness=0)
+	bkgc = Canvas(root.tk, width=1920, height=404, bg=colBg2, highlightthickness=0)
 	bkgc.place(x=0, y=0)
 	
 	sw = StopWatch(root.tk)
 	sw2 = StopWatch(root.tk)
 	sw.pack(side=LEFT, padx=30)
 	sw2.pack(side=RIGHT, padx=30)
+		
+	btnFrm = Frame(root.tk)
+	btnFrm.config(bg=colBg1)
+	btnFrm.pack(side=BOTTOM, anchor=S, fill=X, padx=90)
 
-	Button(root.tk, text='Quit', command=root.tk.quit, font=('Roboto 30'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=48, pady=(5,72))
-	Button(root.tk, text='Reset', command=ResetRace, font=('Roboto 30'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=48, pady=5)
-	Button(root.tk, text='Stop', command=StopRace, font=('Roboto 30'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=48, pady=5) 
-	Button(root.tk, text='Start', command=StartRace, font=('Roboto 44 bold'), bg=colGreen, fg='white', highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=48, pady=5)
-	Button(root.tk, text='Start Lights', command=RaceLights, font=('Roboto 44 bold'), bg=colGreen, fg='white', highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=48, pady=5)
+	Button(btnFrm, text='Quit', command=root.tk.quit, font=('Roboto 24'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=30, pady=(5,72))
+	Button(btnFrm, text='Reset', command=ResetRace, font=('Roboto 24'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=30, pady=5)
+	Button(btnFrm, text='Stop', command=StopRace, font=('Roboto 24'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=30, pady=5) 
+	Button(btnFrm, text='Start', command=StartRace, font=('Roboto 36 bold'), bg=colGreen, fg='white', highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=30, pady=5)
+	Button(btnFrm, text='Lights', command=RaceLights, font=('Roboto 36 bold'), bg=colGreen, fg='white', highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=30, pady=5)
 
 	raceSetup = raceWidgets(root.tk)
 	raceSetup.pack(side=BOTTOM, anchor=S, fill=X, pady=20)
