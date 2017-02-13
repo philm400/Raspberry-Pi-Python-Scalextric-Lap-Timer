@@ -1,6 +1,6 @@
 from tkinter import *
 from threading import Thread
-from PIL import Image
+#from PIL import Image
 import RPi.GPIO as GPIO
 import time
 
@@ -34,38 +34,38 @@ class StopWatch(Frame):
 	def makeWidgets(self):		
 		l2 = Label(self, textvariable=self.lapstr)
 		self.lapstr.set('Lap: 0 / 0')
-		l2.config(fg=colFg2, bg=colBg2, font=("Roboto 14 bold"))
+		l2.config(fg=colFg2, bg=colBg2, font=("Roboto 34 bold"))
 		l2.pack(fill=X, expand=NO, pady=0, padx=0)
 		
 		self.l = Label(self, textvariable=self.timestr)
-		self.l.config(fg=colFg2, bg=colBg2, font=("Roboto 42 bold"))
+		self.l.config(fg=colFg2, bg=colBg2, font=("Roboto 100 bold"))
 		self._setTime(self._elapsedtime)
 		self.l.pack(fill=X, expand=NO, pady=0, padx=0)
 		
 		frm = Frame(self)
 		frm.config(bg=colBg2)
-		frm.pack(fill=X, expand=1, pady=(0,20))
+		frm.pack(fill=X, expand=1, pady=(0,48))
 		
 		self.spt = Label(frm, textvariable=self.lapSplit, anchor=W)
 		self.lapSplit.set('Split: ')
-		self.spt.config(fg=colFg1, bg=colBg2, font=("Roboto 13 bold"))
+		self.spt.config(fg=colFg1, bg=colBg2, font=("Roboto 32 bold"))
 		self.spt.pack(pady=0, padx=0, fill=X, expand=1, side=LEFT)
 				
 		self.best = Label(frm, textvariable=self.bestLap, anchor=E)
 		self.bestLap.set('Best: ')
-		self.best.config(fg=colFg1, bg=colBg2, font=("Roboto 13 bold"))
+		self.best.config(fg=colFg1, bg=colBg2, font=("Roboto 32 bold"))
 		self.best.pack(pady=0, padx=0, fill=X, expand=1, side=RIGHT)
 
 		l3 = Label(self, text='- Times -')
-		l3.config(fg=colFg1, bg=colBg1, font=('Roboto 10'))
+		l3.config(fg=colFg1, bg=colBg1, font=('Roboto 24'))
 		l3.pack(fill=X, expand=NO, pady=0, padx=0)
 		
-		Button(self, text='Finish Line', command=self.Finish, font=('Roboto 10'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, fill=X, expand=1, padx=0, pady=0)
-		Button(self, text='Lap', command=self.Lap, font=('Roboto 10'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, fill=X, expand=1, padx=0, pady=0)
+		Button(self, text='Finish Line', command=self.Finish, font=('Roboto 24'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, fill=X, expand=1, padx=0, pady=0)
+		Button(self, text='Lap', command=self.Lap, font=('Roboto 24'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, fill=X, expand=1, padx=0, pady=10)
 		
 		scrollbar = Scrollbar(self, orient=VERTICAL, bg=colScroll, highlightthickness=0, relief=FLAT, troughcolor=colBg1, bd=0 )
 		self.m = Listbox(self,selectmode=EXTENDED, height = 10, yscrollcommand=scrollbar.set)
-		self.m.config(bd='0', fg=colFg1, bg=colBg1, highlightthickness=0, font=('Courier 12'))
+		self.m.config(bd='0', fg=colFg1, bg=colBg1, highlightthickness=0, font=('Courier 30'))
 		self.m.pack(side=LEFT, fill=BOTH, expand=1, pady=0, padx=0)
 		scrollbar.config(command=self.m.yview)
 		scrollbar.pack(side=RIGHT, fill=Y)
@@ -163,20 +163,21 @@ class raceWidgets(Frame):
 		self.configure(bg=colBg1)
 		LapRace = StringVar()
 		l = Label(self, text='Set Number of Laps')
-		l.config(bg=colBg1, fg=colFg1, font="Roboto 12")
+		l.config(bg=colBg1, fg=colFg1, font="Roboto 30")
 		l.pack(expand=1)
 		LapRace.set('10')
 		et = Entry(self, textvariable=LapRace, width=5, justify='center')
-		et.config(bd='0', bg=colBg2 ,fg=colFg2, highlightthickness=0, font="Roboto 14 bold")
-		et.pack(expand=1, pady=3)
+		et.config(bd='0', bg=colBg2 ,fg=colFg2, highlightthickness=0, font="Roboto 34 bold")
+		et.pack(expand=1, pady=8)
 		
 class Fullscreen_Window:
 	def __init__(self):
 		self.tk = Tk()
-		#self.tk.attributes('-zoomed', True)
+		self.tk.attributes('-zoomed', True)
 		self.frame = Frame(self.tk)
 		self.frame.pack()
-		self.state = False
+		self.state = True
+		self.tk.attributes("-fullscreen", self.state)
 		self.tk.bind("<F11>", self.toggle_fullscreen)
 		self.tk.bind("<Escape>", self.end_fullscreen)
 		
@@ -214,9 +215,9 @@ def RaceLights():
 	photo2 = PhotoImage(file="imgs/light_red.png")
 	photo3 = PhotoImage(file="imgs/light_green.png")
 	lights = []
-	coords = [[154,100],[254,100],[354,100],[454,100],[554,100]]
+	coords = [[370,240],[610,240],[850,240],[1090,240],[1330,240]]
 
-	cv = Canvas(root.tk, width=800, height=470, bg=colBg1)
+	cv = Canvas(root.tk, width=1920, height=1080, bg=colBg1, highlightthickness=0)
 	cv.place(x=0, y=0)
 
 	for i in range(5):
@@ -358,7 +359,7 @@ def main():
 	colBg2 = '#101e28'
 	colFg1 = '#a1aeb4'
 	colFg2 = '#c8d0d4'
-	colGreen = '#6ca32c'
+	colGreen = '#6ca32c' 
 	colRed = '#f34820'
 	colPurple = '#e051d4'
 	colScroll = '#273a46'	
@@ -371,7 +372,7 @@ def main():
 	root.tk.configure(bg='#04080c')
 	root.tk.title('Scalextric Race Control')
 	
-	bkgc = Canvas(root.tk, width=800, height=170, bg=colBg2, highlightthickness=0)
+	bkgc = Canvas(root.tk, width=1920, height=392, bg=colBg2, highlightthickness=0)
 	bkgc.place(x=0, y=0)
 	
 	sw = StopWatch(root.tk)
@@ -379,11 +380,11 @@ def main():
 	sw.pack(side=LEFT, padx=30)
 	sw2.pack(side=RIGHT, padx=30)
 
-	Button(root.tk, text='Quit', command=root.tk.quit, font=('Roboto 12'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=20, pady=(2,30))
-	Button(root.tk, text='Reset', command=ResetRace, font=('Roboto 12'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=20, pady=2)
-	Button(root.tk, text='Stop', command=StopRace, font=('Roboto 12'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=20, pady=2) 
-	Button(root.tk, text='Start', command=StartRace, font=('Roboto 18 bold'), bg=colGreen, fg='white', highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=20, pady=2)
-	Button(root.tk, text='Start L', command=RaceLights, font=('Roboto 18 bold'), bg=colGreen, fg='white', highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=20, pady=2)
+	Button(root.tk, text='Quit', command=root.tk.quit, font=('Roboto 30'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=48, pady=(5,72))
+	Button(root.tk, text='Reset', command=ResetRace, font=('Roboto 30'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=48, pady=5)
+	Button(root.tk, text='Stop', command=StopRace, font=('Roboto 30'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=48, pady=5) 
+	Button(root.tk, text='Start', command=StartRace, font=('Roboto 44 bold'), bg=colGreen, fg='white', highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=48, pady=5)
+	Button(root.tk, text='Start Lights', command=RaceLights, font=('Roboto 44 bold'), bg=colGreen, fg='white', highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=48, pady=5)
 
 	raceSetup = raceWidgets(root.tk)
 	raceSetup.pack(side=BOTTOM, anchor=S, fill=X, pady=20)
