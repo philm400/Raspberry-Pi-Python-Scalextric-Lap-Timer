@@ -10,7 +10,7 @@ class StopWatch(Frame):
 		Frame.__init__(self, parent, kw)
 		global LapRace
 		self.config(bg=colBg2)
-		self._start = 0.0        
+		self._start = 0.0
 		self._elapsedtime = 0.0
 		self._running = 0
 		self.timestr = StringVar()
@@ -47,8 +47,8 @@ class StopWatch(Frame):
 		frm.pack(fill=X, expand=1, pady=(0,50))
 		
 		frm2 = Frame(self)
-		frm2.config(bg=colBg1)
-		frm2.pack(fill=X, expand=1, pady=0)
+		frm2.config(bg=colBg2)
+		frm2.pack(fill=X, expand=1, pady=(0,65))
 		
 		self.spt = Label(frm, textvariable=self.lapSplit, anchor=W)
 		self.lapSplit.set('Split: ')
@@ -69,7 +69,7 @@ class StopWatch(Frame):
 		
 		scrollbar = Scrollbar(frm2, orient=VERTICAL, bg=colScroll, highlightthickness=0, relief=FLAT, troughcolor=colBg1, bd=0 )
 		self.m = Listbox(frm2,selectmode=EXTENDED, height = 10, yscrollcommand=scrollbar.set)
-		self.m.config(bd='0', fg=colFg1, bg=colBg1, highlightthickness=0, font=('Courier 30'))
+		self.m.config(bd='0', fg=colFg1, bg=colBg1, highlightthickness=0, font=('Courier 24'))
 		self.m.pack(side=LEFT, fill=BOTH, expand=1, pady=0, padx=0)
 		scrollbar.config(command=self.m.yview)
 		scrollbar.pack(side=RIGHT, fill=Y)
@@ -376,17 +376,17 @@ def main():
 	root.tk.configure(bg='#04080c')
 	root.tk.title('Scalextric Race Control')
 	
-	bkgc = Canvas(root.tk, width=1920, height=404, bg=colBg2, highlightthickness=0)
+	bkgc = Canvas(root.tk, width=1920, height=411, bg=colBg2, highlightthickness=0)
 	bkgc.place(x=0, y=0)
 	
 	sw = StopWatch(root.tk)
 	sw2 = StopWatch(root.tk)
-	sw.pack(side=LEFT, padx=30)
-	sw2.pack(side=RIGHT, padx=30)
+	sw.pack(side=LEFT, padx=(60,20))
+	sw2.pack(side=RIGHT, padx=(20,60))
 		
 	btnFrm = Frame(root.tk)
 	btnFrm.config(bg=colBg1)
-	btnFrm.pack(side=BOTTOM, anchor=S, fill=X, padx=90)
+	btnFrm.pack(side=BOTTOM, anchor=S, fill=X, padx=80)
 
 	Button(btnFrm, text='Quit', command=root.tk.quit, font=('Roboto 24'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=30, pady=(5,72))
 	Button(btnFrm, text='Reset', command=ResetRace, font=('Roboto 24'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=30, pady=5)
