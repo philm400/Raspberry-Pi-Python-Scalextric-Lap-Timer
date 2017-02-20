@@ -138,8 +138,8 @@ class StopWatch(Frame):
 		""" Finish race for this lane """
 		self.Lap()
 		self.Stop()
-		td = Thread(target=playBuzz, args=())
-		td.start()
+		#td = Thread(target=playBuzz, args=())
+		#td.start()
 
 	def Lap(self):
 		'''Makes a lap, only if started'''
@@ -383,7 +383,7 @@ def main():
 	Button(root.tk, text='Reset', command=ResetRace, font=('Roboto 12'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=20, pady=2)
 	Button(root.tk, text='Stop', command=StopRace, font=('Roboto 12'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=20, pady=2) 
 	Button(root.tk, text='Start', command=StartRace, font=('Roboto 18 bold'), bg=colGreen, fg='white', highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=20, pady=2)
-	Button(root.tk, text='Start L', command=RaceLights, font=('Roboto 18 bold'), bg=colGreen, fg='white', highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=20, pady=2)
+	Button(root.tk, text='Lights', command=RaceLights, font=('Roboto 18 bold'), bg=colGreen, fg='white', highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=20, pady=2)
 
 	raceSetup = raceWidgets(root.tk)
 	raceSetup.pack(side=BOTTOM, anchor=S, fill=X, pady=20)
