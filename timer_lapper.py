@@ -40,15 +40,15 @@ class StopWatch(Frame):
 		self.l = Label(self, textvariable=self.timestr)
 		self.l.config(fg=colFg2, bg=colBg2, font=("Roboto 100 bold"))
 		self._setTime(self._elapsedtime)
-		self.l.pack(fill=X, expand=NO, pady=0, padx=0)
+		self.l.pack(fill=X, expand=NO, pady=(0,46), padx=0)
 		
 		frm = Frame(self)
 		frm.config(bg=colBg2)
 		frm.pack(fill=X, expand=1, pady=(0,50))
 		
 		frm2 = Frame(self)
-		frm2.config(bg=colBg2)
-		frm2.pack(fill=X, expand=1, pady=(0,65))
+		frm2.config(bg=colBg1)
+		frm2.pack(fill=X, expand=1)
 		
 		self.spt = Label(frm, textvariable=self.lapSplit, anchor=W)
 		self.lapSplit.set('Split: ')
@@ -64,7 +64,7 @@ class StopWatch(Frame):
 		l3.config(fg=colFg1, bg=colBg1, font=('Roboto 16'))
 		l3.pack(fill=X, expand=NO, pady=(30,0), padx=0)
 		
-		Button(frm2, text='Finish Line', command=self.Finish, font=('Roboto 24'), bg=colBg1, fg=colFg1, highlightthickness=1, highlightbackground=colFg1, relief=FLAT).pack(side=BOTTOM, fill=X, expand=1, padx=0, pady=0)
+		Button(frm2, text='Finish Line', command=self.Finish, font=('Roboto 24'), bg=colBg1, fg=colFg1, highlightthickness=1, highlightbackground=colFg1, relief=FLAT).pack(side=BOTTOM, fill=X, expand=1, padx=0, pady=(0,65))
 		Button(frm2, text='Lap', command=self.Lap, font=('Roboto 24'), bg=colBg1, fg=colFg1, highlightthickness=1, highlightbackground=colFg1, relief=FLAT).pack(side=BOTTOM, fill=X, expand=1, padx=0, pady=10)
 		
 		scrollbar = Scrollbar(frm2, orient=VERTICAL, bg=colScroll, highlightthickness=0, relief=FLAT, troughcolor=colBg1, bd=0 )
@@ -376,7 +376,7 @@ def main():
 	root.tk.configure(bg='#04080c')
 	root.tk.title('Scalextric Race Control')
 	
-	bkgc = Canvas(root.tk, width=1920, height=411, bg=colBg2, highlightthickness=0)
+	bkgc = Canvas(root.tk, width=1920, height=440, bg=colBg2, highlightthickness=0)
 	bkgc.place(x=0, y=0)
 	
 	sw = StopWatch(root.tk)
