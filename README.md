@@ -22,4 +22,5 @@ It's early days, and I will be extending this dashboard further in the coming we
 * 2 Slot cars with Magnatraction (magnets on the chasis)
 
 ## Raspberry Pi Fritzing diagram
-![Fritzing Diagram] (https://raw.githubusercontent.com/philm400/Raspberry-Pi-Python-Scalextric-Lap-Timer/master/docs/img/Scalextric-Reed-Swtichs_diagram.png)
+![Fritzing Diagram]
+(https://raw.githubusercontent.com/philm400/Raspberry-Pi-Python-Scalextric-Lap-Timer/master/docs/img/Scalextric-Reed-Swtichs_diagram.png)
