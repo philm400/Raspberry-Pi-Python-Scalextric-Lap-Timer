@@ -23,4 +23,4 @@ It's early days, and I will be extending this dashboard further in the coming we
 
 ## Raspberry Pi Fritzing diagram
 ![Fritzing Diagram]
-(https://raw.githubusercontent.com/philm400/Raspberry-Pi-Python-Scalextric-Lap-Timer/master/docs/img/Scalextric-Reed-Swtichs_diagram.png)
+(/docs/img/Scalextric-Reed-Swtichs_diagram.png)
