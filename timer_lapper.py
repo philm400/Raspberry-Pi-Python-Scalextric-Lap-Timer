@@ -40,7 +40,7 @@ class StopWatch(Frame):
 		self.l = Label(self, textvariable=self.timestr)
 		self.l.config(fg=colFg2, bg=colBg2, font=("Roboto 100 bold"))
 		self._setTime(self._elapsedtime)
-		self.l.pack(fill=X, expand=NO, pady=0, padx=0)
+		self.l.pack(fill=X, expand=NO, pady=(0,46), padx=0)
 		
 		frm = Frame(self)
 		frm.config(bg=colBg2)
