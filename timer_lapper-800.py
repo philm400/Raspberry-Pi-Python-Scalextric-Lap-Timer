@@ -1,6 +1,6 @@
 from tkinter import *
 from threading import Thread
-# from PIL import Image
+#from PIL import Image
 import RPi.GPIO as GPIO
 import time
 
@@ -34,42 +34,42 @@ class StopWatch(Frame):
 	def makeWidgets(self):		
 		l2 = Label(self, textvariable=self.lapstr)
 		self.lapstr.set('Lap: 0 / 0')
-		l2.config(fg=colFg2, bg=colBg2, font=("Roboto 34 bold"))
-		l2.pack(fill=X, expand=NO, pady=(40,0), padx=0)
+		l2.config(fg=colFg2, bg=colBg2, font=("Roboto 14 bold"))
+		l2.pack(fill=X, expand=NO, pady=(16,0), padx=0)
 		
 		self.l = Label(self, textvariable=self.timestr)
-		self.l.config(fg=colFg2, bg=colBg2, font=("Roboto 100 bold"))
+		self.l.config(fg=colFg2, bg=colBg2, font=("Roboto 42 bold"))
 		self._setTime(self._elapsedtime)
 		self.l.pack(fill=X, expand=NO, pady=0, padx=0)
 		
 		frm = Frame(self)
 		frm.config(bg=colBg2)
-		frm.pack(fill=X, expand=1, pady=(0,50))
+		frm.pack(fill=X, expand=1, pady=(0,20))
 		
 		frm2 = Frame(self)
 		frm2.config(bg=colBg2)
-		frm2.pack(fill=X, expand=1, pady=(0,65))
+		frm2.pack(fill=X, expand=1, pady=(0,27))
 		
 		self.spt = Label(frm, textvariable=self.lapSplit, anchor=W)
 		self.lapSplit.set('Split: ')
-		self.spt.config(fg=colFg1, bg=colBg2, font=("Roboto 32 bold"))
+		self.spt.config(fg=colFg1, bg=colBg2, font=("Roboto 13 bold"))
 		self.spt.pack(pady=0, padx=0, fill=X, expand=1, side=LEFT)
 				
 		self.best = Label(frm, textvariable=self.bestLap, anchor=E)
 		self.bestLap.set('Best: ')
-		self.best.config(fg=colFg1, bg=colBg2, font=("Roboto 32 bold"))
+		self.best.config(fg=colFg1, bg=colBg2, font=("Roboto 13 bold"))
 		self.best.pack(pady=0, padx=0, fill=X, expand=1, side=RIGHT)
 
 		l3 = Label(frm2, text='- Times -')
-		l3.config(fg=colFg1, bg=colBg1, font=('Roboto 16'))
-		l3.pack(fill=X, expand=NO, pady=(30,0), padx=0)
+		l3.config(fg=colFg1, bg=colBg1, font=('Roboto 7'))
+		l3.pack(fill=X, expand=NO, pady=(12,0), padx=0)
 		
-		Button(frm2, text='Finish Line', command=self.Finish, font=('Roboto 24'), bg=colBg1, fg=colFg1, highlightthickness=1, highlightbackground=colFg1, relief=FLAT).pack(side=BOTTOM, fill=X, expand=1, padx=0, pady=0)
-		Button(frm2, text='Lap', command=self.Lap, font=('Roboto 24'), bg=colBg1, fg=colFg1, highlightthickness=1, highlightbackground=colFg1, relief=FLAT).pack(side=BOTTOM, fill=X, expand=1, padx=0, pady=10)
+		Button(frm2, text='Finish Line', command=self.Finish, font=('Roboto 10'), bg=colBg1, fg=colFg1, highlightthickness=1, highlightbackground=colFg1, relief=FLAT).pack(side=BOTTOM, fill=X, expand=1, padx=0, pady=0)
+		Button(frm2, text='Lap', command=self.Lap, font=('Roboto 10'), bg=colBg1, fg=colFg1, highlightthickness=1, highlightbackground=colFg1, relief=FLAT).pack(side=BOTTOM, fill=X, expand=1, padx=0, pady=4)
 		
 		scrollbar = Scrollbar(frm2, orient=VERTICAL, bg=colScroll, highlightthickness=0, relief=FLAT, troughcolor=colBg1, bd=0 )
 		self.m = Listbox(frm2,selectmode=EXTENDED, height = 10, yscrollcommand=scrollbar.set)
-		self.m.config(bd='0', fg=colFg1, bg=colBg1, highlightthickness=0, font=('Courier 24'))
+		self.m.config(bd='0', fg=colFg1, bg=colBg1, highlightthickness=0, font=('Courier 10'))
 		self.m.pack(side=LEFT, fill=BOTH, expand=1, pady=0, padx=0)
 		scrollbar.config(command=self.m.yview)
 		scrollbar.pack(side=RIGHT, fill=Y)
@@ -167,20 +167,20 @@ class raceWidgets(Frame):
 		self.configure(bg=colBg1)
 		LapRace = StringVar()
 		l = Label(self, text='Set Number of Laps')
-		l.config(bg=colBg1, fg=colFg1, font="Roboto 30")
+		l.config(bg=colBg1, fg=colFg1, font="Roboto 12")
 		l.pack(expand=1)
 		LapRace.set('10')
 		et = Entry(self, textvariable=LapRace, width=5, justify='center')
-		et.config(bd='0', bg=colBg2 ,fg=colFg2, highlightthickness=0, font="Roboto 34 bold")
-		et.pack(expand=1, pady=8)
+		et.config(bd='0', bg=colBg2 ,fg=colFg2, highlightthickness=0, font="Roboto 14 bold")
+		et.pack(expand=1, pady=3)
 		
 class Fullscreen_Window:
 	def __init__(self):
 		self.tk = Tk()
-		self.tk.attributes('-zoomed', True)
+		self.tk.attributes('-zoomed', False) # set this to True to zoom the window to fill the available screen
 		self.frame = Frame(self.tk)
 		self.frame.pack()
-		self.state = True
+		self.state = False  # set to True to start in fullscreen mode
 		self.tk.attributes("-fullscreen", self.state)
 		self.tk.bind("<F11>", self.toggle_fullscreen)
 		self.tk.bind("<Escape>", self.end_fullscreen)
@@ -215,13 +215,13 @@ def ResetRace():
 	sw2.Reset()
 	
 def RaceLights():
-	photo = PhotoImage(file="imgs/light_off_hd.png")
-	photo2 = PhotoImage(file="imgs/light_red_hd.png")
-	photo3 = PhotoImage(file="imgs/light_green_hd.png")
+	photo = PhotoImage(file="imgs/light_off.png") # use the none-hd images already in the repo
+	photo2 = PhotoImage(file="imgs/light_red.png")
+	photo3 = PhotoImage(file="imgs/light_green.png")
 	lights = []
-	coords = [[370,240],[610,240],[850,240],[1090,240],[1330,240]]
+	coords = [[154,100],[254,100],[354,100],[454,100],[545,100]]  #updated co-ordinates based on division by 2.4
 
-	cv = Canvas(root.tk, width=1920, height=1080, bg=colBg1, highlightthickness=0)
+	cv = Canvas(root.tk, width=800, height=480, bg=colBg1, highlightthickness=0)
 	cv.place(x=0, y=0)
 
 	for i in range(5):
@@ -371,31 +371,31 @@ def main():
 	
 	GPIO.setmode(GPIO.BCM)
 	
-	root = Fullscreen_Window()
-	root.tk.geometry("1920x1080")
+	root = Fullscreen_Window() # I've modified the Fullscreen_Window() function to start in a non-zoomed window to test layout - See comments
+	root.tk.geometry("800x480")
 	root.tk.configure(bg='#04080c')
 	root.tk.title('Scalextric Race Control')
 	
-	bkgc = Canvas(root.tk, width=1920, height=411, bg=colBg2, highlightthickness=0)
+	bkgc = Canvas(root.tk, width=800, height=411, bg=colBg2, highlightthickness=0)
 	bkgc.place(x=0, y=0)
 	
 	sw = StopWatch(root.tk)
 	sw2 = StopWatch(root.tk)
-	sw.pack(side=LEFT, padx=(60,20))
-	sw2.pack(side=RIGHT, padx=(20,60))
+	sw.pack(side=LEFT, padx=(25,8))
+	sw2.pack(side=RIGHT, padx=(8,25))
 		
 	btnFrm = Frame(root.tk)
 	btnFrm.config(bg=colBg1)
-	btnFrm.pack(side=BOTTOM, anchor=S, fill=X, padx=80)
+	btnFrm.pack(side=BOTTOM, anchor=S, fill=X, padx=33)
 
-	Button(btnFrm, text='Quit', command=root.tk.quit, font=('Roboto 24'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=30, pady=(5,72))
-	Button(btnFrm, text='Reset', command=ResetRace, font=('Roboto 24'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=30, pady=5)
-	Button(btnFrm, text='Stop', command=StopRace, font=('Roboto 24'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=30, pady=5) 
-	Button(btnFrm, text='Start', command=StartRace, font=('Roboto 36 bold'), bg=colGreen, fg='white', highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=30, pady=5)
-	Button(btnFrm, text='Lights', command=RaceLights, font=('Roboto 36 bold'), bg=colGreen, fg='white', highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=30, pady=5)
+	Button(btnFrm, text='Quit', command=root.tk.quit, font=('Roboto 10'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=12, pady=(2,30))
+	Button(btnFrm, text='Reset', command=ResetRace, font=('Roboto 10'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=12, pady=2)
+	Button(btnFrm, text='Stop', command=StopRace, font=('Roboto 10'), bg=colFg1, fg=colBg1, highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=12, pady=2) 
+	Button(btnFrm, text='Start', command=StartRace, font=('Roboto 15 bold'), bg=colGreen, fg='white', highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=12, pady=2)
+	Button(btnFrm, text='Lights', command=RaceLights, font=('Roboto 15 bold'), bg=colGreen, fg='white', highlightthickness=0, relief=FLAT).pack(side=BOTTOM, anchor=S, fill=X, padx=12, pady=2)
 
 	raceSetup = raceWidgets(root.tk)
-	raceSetup.pack(side=BOTTOM, anchor=S, fill=X, pady=20)
+	raceSetup.pack(side=BOTTOM, anchor=S, fill=X, pady=8)
 	
 	GPIO.setup(pins[0], GPIO.IN)
 	GPIO.add_event_detect(pins[0], GPIO.RISING, callback=triggerLap, bouncetime=1000)
